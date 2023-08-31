@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\Xunit_API.props" />
+</Project>

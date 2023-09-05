@@ -83,7 +83,7 @@ namespace Xunit_TestCases.Controllers
         {
             // Arrange
             var vehicleTypeId = fixture.Create<int>();
-            brandInterface.Setup(b => b.GetAllBrandsOfAVehicleType(vehicleTypeId)).Throws(new Exception("Some error message"));
+            brandInterface.Setup(b => b.GetAllBrandsOfAVehicleType(vehicleTypeId)).Throws(new Exception("Exception Caught"));
 
             // Act
             var result = await brandController.GetAllBrandsOfAVehicleType(vehicleTypeId);

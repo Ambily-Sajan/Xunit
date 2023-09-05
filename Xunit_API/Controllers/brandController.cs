@@ -15,23 +15,33 @@ namespace Xunit_API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllBrandsOfAVehicleType(int id)
+        public async Task<IActionResult> GetAllBrandsOfAVehicleType(int vehicleid)
         {
             try
             {
-                var brand = await brandInterface.GetAllBrandsOfAVehicleType(id);
-                if (brand != null)
+                if (vehicleid != null)
                 {
-                    return Ok(brand);
+
+
+                    var brand = await brandInterface.GetAllBrandsOfAVehicleType(vehicleid);
+                    if (brand != null)
+                    {
+                        return Ok(brand);
+                    }
+                    else
+                    {
+                        return NotFound();
+                    }
                 }
                 else
                 {
-                    return NotFound();
+                    return BadRequest();
                 }
+               
             }
-            catch (Exception ex)
+            catch
             {
-                return BadRequest(ex.Message);
+                return BadRequest("Exception Caught");
             }
         }
         /*[HttpDelete]
@@ -54,9 +64,9 @@ namespace Xunit_API.Controllers
                     return null;
                 }
             }
-            catch(Exception ex)
+            catch
             {
-                return BadRequest(ex.Message);
+                return BadRequest("Exception Caught");
             }
         }
     }

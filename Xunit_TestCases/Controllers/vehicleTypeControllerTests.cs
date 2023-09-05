@@ -44,9 +44,11 @@ namespace Xunit_TestCases.Controllers
         }
 
         [Fact]
-        public void AddVehicleType_ShouldReturnNull_WhenVehicleIsNull()
+        public void AddVehicleType_ShouldReturnBadRequest_WhenVehicleObjectIsNull()
         {
+            //Arrange
             VehicleType vehicle = null;
+            vehicleInterface.Setup(t => t.AddVehicleType(vehicle)).ReturnsAsync((VehicleType)null);
 
             // Act
             var result = vehicleController.AddVehicleType(vehicle);
@@ -54,8 +56,26 @@ namespace Xunit_TestCases.Controllers
             // Assert
             result.Should().NotBeNull();
             result.Should().BeAssignableTo<Task<IActionResult>>();
-            result.Result.Should().BeNull();
-            vehicleInterface.Verify(t => t.AddVehicleType(It.IsAny<VehicleType>()), Times.Once());
+            result.Result.Should().BeAssignableTo<BadRequestResult>();
+            //result.Result.Should().BeNull();
+            vehicleInterface.Verify(t => t.AddVehicleType(It.IsAny<VehicleType>()), Times.Never());
+        }
+        [Fact]
+        public void AddVehicleType_ShouldReturnBadRequest_WhenVehicleIsNull()
+        {
+            //Arrange
+            VehicleType vehicle = null;
+            vehicleInterface.Setup(t => t.AddVehicleType(vehicle)).Returns(Task.FromResult<VehicleType>(null));
+
+            // Act
+            var result = vehicleController.AddVehicleType(vehicle);
+
+            // Assert
+            result.Should().NotBeNull();
+            result.Should().BeAssignableTo<Task<IActionResult>>();
+            result.Result.Should().BeAssignableTo<BadRequestResult>();
+            //result.Result.Should().BeNull();
+            vehicleInterface.Verify(t => t.AddVehicleType(It.IsAny<VehicleType>()), Times.Never());
         }
 
         [Fact]
@@ -96,14 +116,13 @@ namespace Xunit_TestCases.Controllers
         [Fact]
         public void GetAllVehicleType_ShouldReturnNull_WhenVehicleTypesAreNull()
         {
-            // Arrange
-            IEnumerable<VehicleType> vehicleTypes = null;
-            vehicleInterface.Setup(t => t.GetAllVehicleType()).ReturnsAsync(vehicleTypes);
+            //Arrange
+            vehicleInterface.Setup(t => t.GetAllVehicleType()).Returns(Task.FromResult<IEnumerable<VehicleType>>(null));
 
-            // Act
+            //Act
             var result = vehicleController.GetAllVehicleType();
 
-            // Assert
+            //Assert
             result.Should().NotBeNull();
             result.Should().BeAssignableTo<Task<IActionResult>>();
             result.Result.Should().BeNull();

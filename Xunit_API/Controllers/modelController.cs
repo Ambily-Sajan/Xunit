@@ -20,19 +20,28 @@ namespace Xunit_API.Controllers
         {
             try
             {
-                var models = await modelInterface.UpdateModel(id, model);
-                if (models != null)
+                if (model != null)
                 {
-                    return Ok(models);
+
+
+                    var models = await modelInterface.UpdateModel(id, model);
+                    if (models != null)
+                    {
+                        return Ok(models);
+                    }
+                    else
+                    {
+                        return NotFound();
+                    }
                 }
                 else
                 {
-                    return null;
+                    return BadRequest();
                 }
             }
-            catch (Exception ex)
+            catch
             {
-                return BadRequest(ex.Message);
+                return BadRequest("Exception Caught");
             }
         }
         /*[HttpGet]
@@ -71,9 +80,9 @@ namespace Xunit_API.Controllers
                     return null;
                 }
             }
-            catch(Exception ex)
+            catch
             {
-                return BadRequest(ex.Message);
+                return BadRequest("Exception Caught");
             }
             
         }

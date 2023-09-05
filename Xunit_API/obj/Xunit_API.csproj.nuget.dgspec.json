@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\INS\\Training\\ASP.Net\\sampleProject\\API\\Xunit_API\\Xunit_API.csproj": {}
+    "D:\\Xunit\\Xunit\\Xunit_API\\Xunit_API.csproj": {}
   },
   "projects": {
-    "D:\\INS\\Training\\ASP.Net\\sampleProject\\API\\Xunit_API\\Xunit_API.csproj": {
+    "D:\\Xunit\\Xunit\\Xunit_API\\Xunit_API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\INS\\Training\\ASP.Net\\sampleProject\\API\\Xunit_API\\Xunit_API.csproj",
+        "projectUniqueName": "D:\\Xunit\\Xunit\\Xunit_API\\Xunit_API.csproj",
         "projectName": "Xunit_API",
-        "projectPath": "D:\\INS\\Training\\ASP.Net\\sampleProject\\API\\Xunit_API\\Xunit_API.csproj",
+        "projectPath": "D:\\Xunit\\Xunit\\Xunit_API\\Xunit_API.csproj",
         "packagesPath": "C:\\Users\\ambily.sajan\\.nuget\\packages\\",
-        "outputPath": "D:\\INS\\Training\\ASP.Net\\sampleProject\\API\\Xunit_API\\obj\\",
+        "outputPath": "D:\\Xunit\\Xunit\\Xunit_API\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

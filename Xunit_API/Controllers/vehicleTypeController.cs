@@ -22,20 +22,28 @@ namespace Xunit_API.Controllers
         {
             try
             {
-                var vehicle=await vehicleTypeInterface.AddVehicleType(vehicleType);
-                if(vehicle != null) 
+                if (vehicleType != null)
                 {
-                    return Ok(vehicle);
+
+                    var vehicle = await vehicleTypeInterface.AddVehicleType(vehicleType);
+                    if (vehicle != null)
+                    {
+                        return Ok(vehicle);
+                    }
+                    else
+                    {
+                        //return NotFound();
+                        return null;
+                    }
                 }
                 else
                 {
-                    //return NotFound();
-                    return null;
+                    return BadRequest();
                 }
             }
-            catch (Exception ex)
+            catch
             {
-                return BadRequest(ex.Message);
+                return BadRequest("Exception Caught");
             }
         }
         [HttpGet]
@@ -53,9 +61,9 @@ namespace Xunit_API.Controllers
                     return null;
                 }
             }
-            catch (Exception ex)
+            catch
             {
-                return BadRequest(ex.Message);
+                return BadRequest("Exception Caught");
             }
         
         }

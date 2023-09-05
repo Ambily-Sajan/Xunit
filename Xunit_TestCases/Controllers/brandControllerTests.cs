@@ -23,7 +23,7 @@ namespace Xunit_TestCases.Controllers
             brandController = new brandController(brandInterface.Object);
         }
 
-       //Test Cases for GellAllBrandsOfAVehicleType
+        //Test Cases for GellAllBrandsOfAVehicleType
         [Fact]
         public async Task GetAllBrandsOfAVehicleType_ShouldReturnOk_WhenBrandsNotNull()
         {
@@ -43,6 +43,7 @@ namespace Xunit_TestCases.Controllers
             brandInterface.Verify(b => b.GetAllBrandsOfAVehicleType(vehicleTypeId), Times.Once());
         }
 
+
         [Fact]
         public async Task GetAllBrandsOfAVehicleType_ShouldReturnNull_WhenBrandsAreNull()
         {
@@ -58,6 +59,23 @@ namespace Xunit_TestCases.Controllers
             result.Should().NotBeNull();
             result.Should().BeOfType<NotFoundResult>();
             brandInterface.Verify(b => b.GetAllBrandsOfAVehicleType(vehicleTypeId), Times.Once());
+        }
+        [Fact]
+        public void GetAllBrandsOfAVehicleType_ShouldReturnNotFoundObjectResult_WhenNoDataFound()
+        {
+            //Arrange
+            var vehicleTypeId = fixture.Create<int>();
+            IEnumerable<brand> brandList = null;
+            brandInterface.Setup(b => b.GetAllBrandsOfAVehicleType(vehicleTypeId)).ReturnsAsync(brandList);
+
+            //Act
+            var result = brandController.GetAllBrandsOfAVehicleType(vehicleTypeId);
+
+            //Assert
+            result.Should().NotBeNull();
+            result.Should().BeAssignableTo<Task<IActionResult>>();
+            result.Result.Should().BeAssignableTo<NotFoundResult>();
+            brandInterface.Verify(t => t.GetAllBrandsOfAVehicleType(vehicleTypeId), Times.Once());
         }
 
         [Fact]
@@ -78,7 +96,7 @@ namespace Xunit_TestCases.Controllers
 
         //Test Cases for DeleteBrand
         [Fact]
-        public async Task DeleteBrand_ValidAppUserId_ReturnsOkResult()
+        public async Task DeleteBrand_BrandId_ReturnsOkResult()
         {
             // Arrange
             var brandId = fixture.Create<int>();
@@ -99,7 +117,7 @@ namespace Xunit_TestCases.Controllers
 
         }
         [Fact]
-        public async Task DeleteBrand_NullAppUserId_ReturnsNull()
+        public async Task DeleteBrand_BrandId_ReturnsNull()
         {
             // Arrange
             var brandId = fixture.Create<int>();

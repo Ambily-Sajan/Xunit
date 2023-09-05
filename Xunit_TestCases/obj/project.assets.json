@@ -8107,11 +8107,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\INS\\Training\\ASP.Net\\sampleProject\\API\\Xunit_TestCases\\Xunit_TestCases.csproj",
+      "projectUniqueName": "D:\\Xunit\\Xunit\\Xunit_TestCases\\Xunit_TestCases.csproj",
       "projectName": "Xunit_TestCases",
-      "projectPath": "D:\\INS\\Training\\ASP.Net\\sampleProject\\API\\Xunit_TestCases\\Xunit_TestCases.csproj",
+      "projectPath": "D:\\Xunit\\Xunit\\Xunit_TestCases\\Xunit_TestCases.csproj",
       "packagesPath": "C:\\Users\\ambily.sajan\\.nuget\\packages\\",
-      "outputPath": "D:\\INS\\Training\\ASP.Net\\sampleProject\\API\\Xunit_TestCases\\obj\\",
+      "outputPath": "D:\\Xunit\\Xunit\\Xunit_TestCases\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -8133,8 +8133,8 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "projectReferences": {
-            "D:\\INS\\Training\\ASP.Net\\sampleProject\\API\\Xunit_API\\Xunit_API.csproj": {
-              "projectPath": "D:\\INS\\Training\\ASP.Net\\sampleProject\\API\\Xunit_API\\Xunit_API.csproj"
+            "D:\\Xunit\\Xunit\\Xunit_API\\Xunit_API.csproj": {
+              "projectPath": "D:\\Xunit\\Xunit\\Xunit_API\\Xunit_API.csproj"
             }
           }
         }

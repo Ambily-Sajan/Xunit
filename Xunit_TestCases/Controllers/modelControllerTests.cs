@@ -2,10 +2,12 @@ using AutoFixture;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Moq;
 using Xunit_API.Controllers;
 using Xunit_API.Models;
 using Xunit_API.Services.Interface;
+using Model = Xunit_API.Models.Model;
 
 namespace Xunit_TestCases.Controllers
 {
@@ -25,43 +27,60 @@ namespace Xunit_TestCases.Controllers
         }
 
         //Test cases for updating model
+        
         [Fact]
-        public async Task UpdateModel_ShouldReturnUpdatedModel_WhenNotNull()
+        public void UpdateModel_ShouldReturnUpdatedModel_WhenEditSuccess()
         {
-            // Arrange
+            //Arrange
             var modelId = fixture.Create<int>();
             var updatedModel = fixture.Create<Model>();
+            var returnData= fixture.Create<Model>();
+            modelInterface.Setup(c => c.UpdateModel(modelId, updatedModel)).ReturnsAsync(returnData);
 
-            modelInterface.Setup(m => m.UpdateModel(modelId, It.IsAny<Model>()))
-                          .ReturnsAsync(updatedModel);
+            //Act
+            var result = modelController.UpdateModel(modelId, updatedModel);
 
-            // Act
-            var result = await modelController.UpdateModel(modelId, updatedModel);
-
-            // Assert
+            //Assert
             result.Should().NotBeNull();
-            result.Should().BeOfType<OkObjectResult>();
-            var okResult = result as OkObjectResult;
-            okResult.Value.Should().BeAssignableTo<Model>().Subject
-                    .Should().BeEquivalentTo(updatedModel);
+            result.Should().BeAssignableTo<Task<IActionResult>>();
+            result.Result.Should().BeAssignableTo<OkObjectResult>();
+            modelInterface.Verify(t => t.UpdateModel(modelId, updatedModel), Times.Once());
+        }
+        
+        [Fact]
+        public void UpdateModel_ShouldReturnNull_WhenInputObjectIsNull()
+        {
+            //Arrange
+            var modelId = fixture.Create<int>();
+            Model models = null;
+            modelInterface.Setup(c => c.UpdateModel(modelId, models)).ReturnsAsync((Model)null) ;
 
-            modelInterface.Verify(m => m.UpdateModel(modelId, It.IsAny<Model>()), Times.Once());
+            //Act
+            var result = modelController.UpdateModel(modelId, models);
+
+            //Assert
+            result.Should().NotBeNull();
+            result.Should().BeAssignableTo<Task<IActionResult>>();
+            result.Result.Should().BeAssignableTo<BadRequestResult>();
+            modelInterface.Verify(t => t.UpdateModel(modelId, models), Times.Never());
+
         }
         [Fact]
-        public async Task UpdateModel_ShouldReturnNull_WhenServiceReturnsNull()
+        public void UpdateModel_ShouldReturnNotFoundObjectResult_WhenNoDataFound()
         {
-            // Arrange
+            //Arrange
             var modelId = fixture.Create<int>();
-            modelInterface.Setup(m => m.UpdateModel(modelId, It.IsAny<Model>()))
-                          .ReturnsAsync((Model)null);
+            var model = fixture.Create<Model>();
+            modelInterface.Setup(c => c.UpdateModel(modelId, model)).Returns(Task.FromResult<Model>(null));
 
-            // Act
-            var result = await modelController.UpdateModel(modelId, new Model());
+            //Act
+            var result = modelController.UpdateModel(modelId, model);
 
-            // Assert
-            result.Should().BeNull();
-
-            modelInterface.Verify(m => m.UpdateModel(modelId, It.IsAny<Model>()), Times.Once());
+            //Assert
+            result.Should().NotBeNull();
+            result.Should().BeAssignableTo<Task<IActionResult>>();
+            result.Result.Should().BeAssignableTo<NotFoundResult>();
+            modelInterface.Verify(t => t.UpdateModel(modelId, model), Times.Once());
         }
 
         [Fact]

@@ -25,23 +25,27 @@ namespace Xunit_TestCases.Controllers
 
         //Test Cases for Add vehicle Type
         [Fact]
-        public void AddVechicleType_ShouldReturnOk_WhenVehicleIsNotNull()
+        public async Task AddVehicleType_ShouldReturnOk_WhenVehicleIsNotNull()
         {
-            //Arrange
+            // Arrange
             var vehicle = fixture.Create<VehicleType>();
             var returnData = fixture.Create<VehicleType>();
             vehicleInterface.Setup(t => t.AddVehicleType(vehicle)).ReturnsAsync(returnData);
-            
-            //Act
-            var result = vehicleController.AddVehicleType(vehicle);
 
-            //Assert
+            // Act
+            var result = await vehicleController.AddVehicleType(vehicle) as OkObjectResult;
+
+            // Assert
             result.Should().NotBeNull();
-            result.Should().BeAssignableTo<Task<IActionResult>>();
-            result.Result.Should().BeAssignableTo<OkObjectResult>();
+            result.Should().BeAssignableTo<IActionResult>();
+            result.Should().BeOfType<OkObjectResult>();
+            var addedVehicle = result.Value as VehicleType;
+            addedVehicle.Should().NotBeNull();
+            addedVehicle.Should().BeEquivalentTo(returnData);
             vehicleInterface.Verify(t => t.AddVehicleType(vehicle), Times.Once());
-
+            
         }
+
 
         [Fact]
         public void AddVehicleType_ShouldReturnBadRequest_WhenVehicleObjectIsNull()
@@ -91,27 +95,33 @@ namespace Xunit_TestCases.Controllers
             // Assert
             result.Should().NotBeNull();
             result.Should().BeAssignableTo<Task<IActionResult>>();
-            result.Result.Should().BeAssignableTo<BadRequestObjectResult>();
+            result.Result.Should().BeAssignableTo<BadRequestObjectResult>().Subject.Value.Should().Be("Exception Caught");
             vehicleInterface.Verify(t => t.AddVehicleType(vehicle), Times.Once());
         }
 
         //Test cases for GetAllVehicleType
         [Fact]
-        public void GetAllVehicleType_ShouldReturnOk_WhenVehicleTypesNotNull()
+        public async Task GetAllVehicleType_ShouldReturnOk_WhenVehicleTypesNotNull()
         {
             // Arrange
-            var vehicleTypes = fixture.CreateMany<VehicleType>();
+            var vehicleTypes = fixture.CreateMany<VehicleType>().ToList();
             vehicleInterface.Setup(t => t.GetAllVehicleType()).ReturnsAsync(vehicleTypes);
 
             // Act
-            var result = vehicleController.GetAllVehicleType();
+            var result = await vehicleController.GetAllVehicleType();
 
             // Assert
             result.Should().NotBeNull();
-            result.Should().BeAssignableTo<Task<IActionResult>>();
-            result.Result.Should().BeAssignableTo<OkObjectResult>();
+            result.Should().BeAssignableTo<IActionResult>();
+            result.Should().BeOfType<OkObjectResult>();
+            var okResult = result as OkObjectResult;
+            okResult.Should().NotBeNull();
+            var returnedVehicleTypes = okResult.Value as List<VehicleType>;
+            returnedVehicleTypes.Should().NotBeNull();
+            returnedVehicleTypes.Should().BeEquivalentTo(vehicleTypes); 
             vehicleInterface.Verify(t => t.GetAllVehicleType(), Times.Once());
         }
+
 
         [Fact]
         public void GetAllVehicleType_ShouldReturnNull_WhenVehicleTypesAreNull()
@@ -141,7 +151,7 @@ namespace Xunit_TestCases.Controllers
             // Assert
             result.Should().NotBeNull();
             result.Should().BeAssignableTo<Task<IActionResult>>();
-            result.Result.Should().BeAssignableTo<BadRequestObjectResult>();
+            result.Result.Should().BeAssignableTo<BadRequestObjectResult>().Subject.Value.Should().Be("Exception Caught"); ;
             vehicleInterface.Verify(t => t.GetAllVehicleType(), Times.Once());
         }
     }

@@ -90,7 +90,7 @@ namespace Xunit_TestCases.Controllers
 
             // Assert
             result.Should().NotBeNull();
-            result.Should().BeOfType<BadRequestObjectResult>();
+            result.Should().BeOfType<BadRequestObjectResult>().Subject.Value.Should().Be("Exception Caught"); ;
             brandInterface.Verify(b => b.GetAllBrandsOfAVehicleType(vehicleTypeId), Times.Once());
         }
 
@@ -143,7 +143,7 @@ namespace Xunit_TestCases.Controllers
             var result = await brandController.DeleteBrand(brandId);
 
             // Assert
-            result.Should().BeOfType<BadRequestObjectResult>();
+            result.Should().BeOfType<BadRequestObjectResult>().Subject.Value.Should().Be("Exception Caught"); ;
             brandInterface.Verify(r => r.DeleteBrand(brandId), Times.Once());
         }
 

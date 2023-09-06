@@ -27,26 +27,27 @@ namespace Xunit_TestCases.Controllers
         }
 
         //Test cases for updating model
-        
+
         [Fact]
-        public void UpdateModel_ShouldReturnUpdatedModel_WhenEditSuccess()
+        public async Task UpdateModel_ShouldReturnUpdatedModel_WhenEditSuccess()
         {
-            //Arrange
+            // Arrange
             var modelId = fixture.Create<int>();
             var updatedModel = fixture.Create<Model>();
-            var returnData= fixture.Create<Model>();
+            var returnData = fixture.Create<Model>();
             modelInterface.Setup(c => c.UpdateModel(modelId, updatedModel)).ReturnsAsync(returnData);
 
-            //Act
-            var result = modelController.UpdateModel(modelId, updatedModel);
+            // Act
+            var result = await modelController.UpdateModel(modelId, updatedModel) as OkObjectResult;
 
-            //Assert
+            // Assert
             result.Should().NotBeNull();
-            result.Should().BeAssignableTo<Task<IActionResult>>();
-            result.Result.Should().BeAssignableTo<OkObjectResult>();
+            result.Value.Should().BeAssignableTo<Model>().And.BeEquivalentTo(returnData);
+
             modelInterface.Verify(t => t.UpdateModel(modelId, updatedModel), Times.Once());
         }
-        
+
+
         [Fact]
         public void UpdateModel_ShouldReturnNull_WhenInputObjectIsNull()
         {
@@ -95,7 +96,7 @@ namespace Xunit_TestCases.Controllers
             var result = await modelController.UpdateModel(modelId, new Model());
 
             // Assert
-            result.Should().BeOfType<BadRequestObjectResult>();
+            result.Should().BeOfType<BadRequestObjectResult>().Subject.Value.Should().Be("Exception Caught"); ;
             modelInterface.Verify(m => m.UpdateModel(modelId, It.IsAny<Model>()), Times.Once());
         }
         //Test cases for GetModelsAndBrands
@@ -147,7 +148,7 @@ namespace Xunit_TestCases.Controllers
             var result = await modelController.GetModelsAndBrands();
 
             // Assert
-            result.Should().BeOfType<BadRequestObjectResult>();
+            result.Should().BeOfType<BadRequestObjectResult>().Subject.Value.Should().Be("Exception Caught"); ;
             modelInterface.Verify(m => m.GetAllModelBrand(), Times.Once());
         }
     }
